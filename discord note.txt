@@ -1,0 +1,26 @@
+https://pypi.python.org/pypi/pafy  - youtube audio retriever, might not be needed
+https://github.com/soundcloud/soundcloud-python    - soundcloud api if needed
+https://stackoverflow.com/questions/22811102/stream-a-song-from-soundcloud-using-the-python-api 
+https://developers.google.com/youtube/
+https://github.com/Twentysix26/Red-DiscordBot    - example discord bot
+https://discordapp.com/developers/docs/intro   -discord api
+https://github.com/Rapptz/discord.py/tree/async   - discord api python wrapper
+https://discordpy.readthedocs.io/en/async/index.html   - doc for the api wrapper 
+https://discordapp.com/invite/0SBTUU1wZTWPnGdJ   - discord devs channel
+https://docs.python.org/2.7/c-api/index.html  - api stuffs for python 2.6+
+https://www.codecademy.com/courses/python-intermediate-en-6zbLp/0/1?curriculum_id=50ecbb9b71204640240001bf  - tutorial on api for python
+https://www.youtube.com/watch?v=pxofwuWTs7c&index=2&list=PLEsfXFp6DpzR6FatOy4RtoXfu4PeYO_RL   - good video on python api stuffs
+https://www.youtube.com/watch?v=eWisX-Wt5oU&index=4&list=PLEsfXFp6DpzR6FatOy4RtoXfu4PeYO_RL   - more video on python api stuffs
+http://www.pythonforbeginners.com/api/list-of-python-apis    - list of python apis for shit testing
+
+
+BOT INFORMATION
+
+APP BOT USER
+Username: DISCORD-BOT#6750
+Bot ID: 211202732910968832
+Token: MjExMjAyNzMyOTEwOTY4ODMy.CoZ5aw.CTxXxFf6-ZxnWhLi9hRRSyJp5nM
+
+USEFUL RESOURCES:
+https://stackoverflow.com/questions/37689289/joining-a-server-with-the-discord-python-api   - solved joining a server
+https://pypi.python.org/pypi/drunkbot/1.9    - the good stuffs
