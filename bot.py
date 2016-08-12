@@ -128,4 +128,26 @@ if MD5hash == md5.hexdigest() and SHA1hash==sha1.hexdigest():
 else:
 	readUserSetting()
 
+#creating an instance of a bot
 bot=discord.Client()
+#logging in
+try:
+	if LoginbyTok:
+		await client.login(Token)
+	else:
+		await client.login(Username, Password)
+except discord.LoginFailure:
+	print("Failed to login -- Wrong Token or Username/Password")
+	print("Logining in with default token ....")
+	client.login(defaultToken)
+except discord.HTTPException:
+	print(" An unknown HTTP related error occurred, usually when it isn’t 200 or the known incorrect credentials passing status code.")
+	sys.quit(0)
+#joining a channel
+try:
+	bot.accept_invite(Invite)
+except (discord.HTTPException, discord.NotFound):
+	print("Failed to accept the invite, please check the invite URL, if the bot can join the channel or not")
+	sys.exit(0)
+
+bot.send_message(message.channel, "The bot has joined!")
