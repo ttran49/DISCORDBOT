@@ -1,4 +1,4 @@
-#import discord, pafy
+import discord
 import sys,hashlib
 
 ###############################################################
@@ -41,12 +41,6 @@ Username=None
 Password=None
 Token=None
 Invite= None
-
-#check hash value		
-if MD5hash == md5.hexdigest() and SHA1hash==sha1.hexdigest():
-	fristTimeSetup()
-else:
-	readUserSetting()
 	
 #################################################################
 #
@@ -82,7 +76,7 @@ def fristTimeSetup():
 	print("First time running the bot, required information. Would you like to run the setup? Y/N")
 	userInput = None
 	while True:
-		userInput=raw_input()
+		userInput=input()
 		if userInput.lower() == 'y' or userInput.lower() == 'n':
 			break
 		else:
@@ -92,7 +86,7 @@ def fristTimeSetup():
 	if userInput.lower()=='y':
 		print ("Login method: token or username and password?- T/U")
 		while True:
-			userInput=raw_input()
+			userInput=input()
 			if userInput.lower() == 't':
 				LoginbyTok=True
 				break
@@ -102,12 +96,12 @@ def fristTimeSetup():
 			else:
 				print ("Invalid input, T/U")
 		if LoginbyTok:
-			Token= raw_input("Enter the token: ")
+			Token= input("Enter the token: ")
 		elif not LoginbyTok:
-			Username= raw_input("Enter Username: ")
-			Password= raw_input("Enter Password: ")
+			Username= input("Enter Username: ")
+			Password= input("Enter Password: ")
 			
-		Invite= raw_input("Copy and Paste the Server Invite: ")
+		Invite= input("Copy and Paste the Server Invite: ")
 		
 		#writtng the settings to the user file for future use
 		settingFile= open('UserSetting.txt', 'w')
@@ -124,5 +118,14 @@ def fristTimeSetup():
 		settingFile.write('Invite= ' + Invite)
 		settingFile.close()
 	elif userInput.lower() =='n':
-		readUserSetting()
-		
+		try:
+			readUserSetting()
+		except:
+			print("ERROR ---- make sure to put correct information in UserSetting.txt ")
+#check hash value		
+if MD5hash == md5.hexdigest() and SHA1hash==sha1.hexdigest():
+	fristTimeSetup()
+else:
+	readUserSetting()
+
+bot=discord.Client()
