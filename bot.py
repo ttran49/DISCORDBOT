@@ -151,3 +151,4 @@ except (discord.HTTPException, discord.NotFound):
 	sys.exit(0)
 
 bot.send_message(message.channel, "The bot has joined!")
+bot.run()
