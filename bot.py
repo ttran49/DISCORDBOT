@@ -157,15 +157,16 @@ bot=discord.Client()
 #logging in
 try:
 	if LoginbyTok:
-		await client.login(Token)
+		bot.login(Token)
 	else:
-		await client.login(Username, Password)
+		bot.login(Username, Password)
 except discord.LoginFailure:
 	print("Failed to login -- Wrong Token or Username/Password")
 	print("Logining in with default token ....")
-	client.login(defaultToken)
+	bot.login(defaultToken)
 except discord.HTTPException:
 	print(" An unknown HTTP related error occurred, usually when it isn’t 200 or the known incorrect credentials passing status code.")
+	bot.close()
 	sys.quit(0)
 #joining a channel
 join_by_invite(Invite)
