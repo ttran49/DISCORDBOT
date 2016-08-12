@@ -122,6 +122,30 @@ def fristTimeSetup():
 			readUserSetting()
 		except:
 			print("ERROR ---- make sure to put correct information in UserSetting.txt ")
+###################################################################
+#
+#	Join a channel or server by invite
+#
+#	Exception:	HTTPException -  Accepting the invite failed.
+#				NotFound  - The invite is invalid/expired
+#	Exit when exception occurs
+#				
+###################################################################
+def join_by_invite(invite):
+	try:
+		bot.accept_invite(Invite)
+		bot.send_message(message.channel, "The bot has joined!")
+	except (discord.HTTPException, discord.NotFound):
+		print("Failed to accept the invite, please check the invite URL, if the bot can join the channel or not")
+		sys.exit(0)
+###################################################################
+#
+#	Display in chat all the options for the bot
+#
+###################################################################	
+def display_option():
+	option= "Options for the bot: \n	!join: join a server or channel url that given by user\n		Ex: !join INVITE_URL\n	!help: displaying all options"
+	bot.send_message(message.channel, option)
 #check hash value		
 if MD5hash == md5.hexdigest() and SHA1hash==sha1.hexdigest():
 	fristTimeSetup()
@@ -144,11 +168,24 @@ except discord.HTTPException:
 	print(" An unknown HTTP related error occurred, usually when it isn’t 200 or the known incorrect credentials passing status code.")
 	sys.quit(0)
 #joining a channel
-try:
-	bot.accept_invite(Invite)
-except (discord.HTTPException, discord.NotFound):
-	print("Failed to accept the invite, please check the invite URL, if the bot can join the channel or not")
-	sys.exit(0)
+join_by_invite(Invite)
 
-bot.send_message(message.channel, "The bot has joined!")
+#####################################################################
+#
+#	Listen to user message to see if user give the bot any command
+#	Command rule: start with ! and a action
+#	Command:  	!join +"INVITE_URL"  - tell the bot to join a different channel or server
+#				!help - displaying all the option, commands, and syntax
+#
+######################################################################
+@client.event
+def on_message(message):
+	if message.content.startwith("!join"):
+		join_by_invite(message.content.strip("!join "))
+	if message.content.startswith("!help"):
+		display_option()
 bot.run()
+
+
+
+
