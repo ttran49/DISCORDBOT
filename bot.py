@@ -33,14 +33,8 @@ with open("UserSetting.txt", 'rb') as f:
         md5.update(data)
         sha1.update(data)
 
-#GLOBAL VARIABLE I GUESS, dont know python prob
-LoginbyTok=None
 #default token, login if wrong username, pwd, token provided
 defaultToken="MjExMjAyNzMyOTEwOTY4ODMy.CoZ5aw.CTxXxFf6-ZxnWhLi9hRRSyJp5nM"
-Username=None
-Password=None
-Token=None
-Invite= None
 
 #Globals are gross, let's pass information with an object
 #
