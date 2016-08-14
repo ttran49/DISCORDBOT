@@ -41,38 +41,69 @@ Username=None
 Password=None
 Token=None
 Invite= None
-	
-#################################################################
+
+#Globals are gross, let's pass information with an object
 #
-#	Reading the settings from UserSetting.txt file
+#UserSettings object, manages our settings information
 #
-#################################################################
-def readUserSetting():
-	settingFile= open('UserSetting.txt', 'r')
-	for text in settingFile.readlines():
-		things = text.split()
-		if things[0] == 'Login_Method=':
-			if things[1].lower() == 'token':
-				LoginbyTok=True
-			elif things[1].lower() == 'username':
-				LoginbyTok= False
-		elif things[0] == 'Token=' and LoginbyTok:
-			Token=things[1]
-		elif things[0] == 'Username=' and not LoginbyTok:
-			Username= things[1]
-		elif things[0] == 'Password=' and not LoginbyTok:
-			Password= things[1]
-		elif things[0] == 'Invite=':
-			Invite=things[1]
-	settingFile.close()
-	
+class UserSettings(object):
+#Gets and sets for the fields
+	def _setLoginMethod(self, method):
+		self._LoginMethod = method
+	def _getLoginMethod(self):
+		return self._LoginMethod
+	def _setToken(self, token):
+		self._Token = token
+	def _getToken(self):
+		return self._Token
+	def _setUsername(self, username):
+		self._Username = username
+	def _getUsername(self):
+		return self._Username
+	def _setPassword(self, password):
+		self._Password = password
+	def _getPassword(self):
+		return self._Password
+	def _setInvite(self, invite):
+		self._Invite = invite
+	def _getInvite(self):
+		return self._Invite
+#Property definitions
+
+	loginMethod = property(_getLoginMethod, _setLoginMethod)
+	token = property(_getToken, _setToken)
+	username = property(_getUsername, _setUsername)
+	password = property(_getPassword, _setPassword)
+	invite = property(_getInvite, _setInvite)
+
+#Method definitions
+
+#We can read in the settings a little more dynamically or we can manually set them with properties
+	def readUserSetting(settingsFile): #UserSetting.txt
+		settingFile= open(settingsFile, 'r')
+		for text in settingFile.readlines():
+			things = text.split()
+			if things[0] == 'Login_Method=':
+				if things[1].lower() == 'token':
+					UserSettings.loginMethod = "token"
+				elif things[1].lower() == 'username':
+					UserSettings.loginMethod = "username"
+			elif things[0] == 'Token=' and UserSettings.loginMethod == "token":
+				UserSettings.token = things[1]
+			elif things[0] == 'Username=' and UserSettings.loginMethod == "username":
+				UserSettings.username = things[1]
+			elif things[0] == 'Password=' and UserSettings.loginMethod == "username":
+				UserSettings.password = things[1]
+			elif things[0] == 'Invite=':
+				UserSettings.invite = things[1]
+		settingFile.close()
 ###################################################################
 #
 #	Running first time set up, get infor from user. update fields
 #	write it to UserSetting for future use
 #
 ###################################################################
-def fristTimeSetup():
+def firstTimeSetup(settings):
 	print("First time running the bot, required information. Would you like to run the setup? Y/N")
 	userInput = None
 	while True:
@@ -88,38 +119,38 @@ def fristTimeSetup():
 		while True:
 			userInput=input()
 			if userInput.lower() == 't':
-				LoginbyTok=True
+				settings.loginMethod = "token"
 				break
 			elif userInput.lower() == 'u':
-				LoginbyTok=False
+				settings.loginMethod = "username"
 				break
 			else:
 				print ("Invalid input, T/U")
-		if LoginbyTok:
-			Token= input("Enter the token: ")
-		elif not LoginbyTok:
-			Username= input("Enter Username: ")
-			Password= input("Enter Password: ")
+		if settings.loginMethod == "token":
+			settings.token = input("Enter the token: ")
+		elif settings.loginMethod == "username":
+			settings.username= input("Enter Username: ")
+			settings.password= input("Enter Password: ")
 			
-		Invite= input("Copy and Paste the Server Invite: ")
+		settings.invite= input("Copy and Paste the Server Invite: ")
 		
 		#writtng the settings to the user file for future use
 		settingFile= open('UserSetting.txt', 'w')
-		if LoginbyTok:
+		if settings.loginMethod == "token":
 			settingFile.write('Login_Method= token\n')
-			settingFile.write('Token= ' + Token + '\n')
+			settingFile.write('Token= ' + settings.token + '\n')
 			settingFile.write('Username= \n')
 			settingFile.write('Password= \n')
 		else:
 			settingFile.write('Login_Method= username\n')
 			settingFile.write('Token= \n')
-			settingFile.write('Username= '+Username+'\n')
-			settingFile.write('Password= '+Password+'\n')
-		settingFile.write('Invite= ' + Invite)
+			settingFile.write('Username= '+ settings.username+'\n')
+			settingFile.write('Password= '+ settings.password+'\n')
+		settingFile.write('Invite= ' + settings.invite)
 		settingFile.close()
 	elif userInput.lower() =='n':
 		try:
-			readUserSetting()
+			settings.readUserSetting(UserSetting.txt)
 		except:
 			print("ERROR ---- make sure to put correct information in UserSetting.txt ")
 ###################################################################
@@ -131,8 +162,9 @@ def fristTimeSetup():
 #	Exit when exception occurs
 #				
 ###################################################################
-def join_by_invite(invite):
+def join_by_invite(Invite):
 	try:
+		print(Invite)
 		bot.accept_invite(Invite)
 		bot.send_message(message.channel, "The bot has joined!")
 	except (discord.HTTPException, discord.NotFound):
@@ -146,20 +178,23 @@ def join_by_invite(invite):
 def display_option():
 	option= "Options for the bot: \n	!join: join a server or channel url that given by user\n		Ex: !join INVITE_URL\n	!help: displaying all options"
 	bot.send_message(message.channel, option)
-#check hash value		
+#check hash value
+settings = UserSettings()
 if MD5hash == md5.hexdigest() and SHA1hash==sha1.hexdigest():
-	fristTimeSetup()
+	firstTimeSetup(UserSettings)
 else:
-	readUserSetting()
+	print("Reading those settings")
+	UserSettings.readUserSetting("UserSetting.txt")
 
 #creating an instance of a bot
 bot=discord.Client()
 #logging in
 try:
-	if LoginbyTok:
-		bot.login(Token)
+	if UserSettings.loginMethod == "token":
+		bot.login(UserSettings.token)
+		print(UserSettings.token)
 	else:
-		bot.login(Username, Password)
+		bot.login(UserSettings.username, UserSettings.password)
 except discord.LoginFailure:
 	print("Failed to login -- Wrong Token or Username/Password")
 	print("Logining in with default token ....")
@@ -169,7 +204,11 @@ except discord.HTTPException:
 	bot.close()
 	sys.quit(0)
 #joining a channel
-join_by_invite(Invite)
+try:
+	join_by_invite(UserSettings.invite)
+except:
+	print("[-] Looks like we had some issues with the invite... Exiting")
+	exit(0)
 
 #####################################################################
 #
