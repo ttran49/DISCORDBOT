@@ -1,5 +1,8 @@
 import discord
+from discord.ext import commands
+import asyncio
 import sys,hashlib
+import traceback
 
 ###############################################################
 #
@@ -160,7 +163,7 @@ def join_by_invite(Invite):
 	try:
 		print(Invite)
 		bot.accept_invite(Invite)
-		bot.send_message(message.channel, "The bot has joined!")
+#		bot.send_message(server, "The bot has joined!")
 	except (discord.HTTPException, discord.NotFound):
 		print("Failed to accept the invite, please check the invite URL, if the bot can join the channel or not")
 		sys.exit(0)
@@ -169,7 +172,7 @@ def join_by_invite(Invite):
 #	Display in chat all the options for the bot
 #
 ###################################################################	
-def display_option():
+def display_option(message):
 	option= "Options for the bot: \n	!join: join a server or channel url that given by user\n		Ex: !join INVITE_URL\n	!help: displaying all options"
 	bot.send_message(message.channel, option)
 #check hash value
@@ -181,7 +184,7 @@ else:
 	UserSettings.readUserSetting("UserSetting.txt")
 
 #creating an instance of a bot
-bot=discord.Client()
+bot=commands.Bot(command_prefix='!', description="A wicked bad ass bot")
 #logging in
 try:
 	if UserSettings.loginMethod == "token":
@@ -191,7 +194,7 @@ try:
 		bot.login(UserSettings.username, UserSettings.password)
 except discord.LoginFailure:
 	print("Failed to login -- Wrong Token or Username/Password")
-	print("Logining in with default token ....")
+	print("Loging in with default token ....")
 	bot.login(defaultToken)
 except discord.HTTPException:
 	print(" An unknown HTTP related error occurred, usually when it isn’t 200 or the known incorrect credentials passing status code.")
@@ -202,6 +205,7 @@ try:
 	join_by_invite(UserSettings.invite)
 except:
 	print("[-] Looks like we had some issues with the invite... Exiting")
+	traceback.print_exc()
 	exit(0)
 
 #####################################################################
@@ -212,14 +216,19 @@ except:
 #				!help - displaying all the option, commands, and syntax
 #
 ######################################################################
-@client.event
+@bot.event
+@asyncio.coroutine
+def on_ready():
+    print('Logged in as')
+    print(bot.user.name)
+    print(bot.user.id)
+    print('------')
+
+@bot.event
+@asyncio.coroutine
 def on_message(message):
-	if message.content.startwith("!join"):
+	if message.content.startswith("!join"):
 		join_by_invite(message.content.strip("!join "))
 	if message.content.startswith("!help"):
-		display_option()
-bot.run()
-
-
-
-
+		display_option(message)
+bot.run(UserSettings.token) #Hack for now
