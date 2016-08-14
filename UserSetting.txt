@@ -1,5 +1,5 @@
-Login_Method= 
-Token= 
+Login_Method= token
+Token= MjE0MjE4NzY5MzQ4ODIxMDAz.CpGHaw.9nDdk6eAz88cZA49KsJxf7t8l3s
 Username= 
 Password= 
-Invite= 
+Invite= https://discord.gg/AuU42f4
