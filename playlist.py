@@ -1,28 +1,46 @@
+from discord.ext import commands
+import discord, pafy
+import os, sys, logging
+
+############################
+#
+#	Creating custom exception
+#
+############################
+
+class NotValidNameOrURL(Exception):
+    pass
+
+class DuplicateSongURL(Exception):
+	pass
+	
+class PlaylistIsEmpty(Exception):
+	pass
+	
+
 #
 #	queue structures for storing music link
 #	sone request/ and song queue/ playlist
 #
-
-__author__= "Chuck Tran, Han Liu, Chris Robert or mostly Chuck"
-
 class Playlist():
-	__songs__
+	__songs__=[]
 	
 	def __init__(self):
-		self.__song__=[]
+		pass
+		
 
 	def addsong(song_name):
 		#adding song to the playlist, check if there is a same song, if song
 		#already in do not add.
 		if !isinstance(song_name, basestring)
-			print ("NOT A VALID INPUT, MUST BE A URL IN STRING")
+			raise NotValidNameOrURL()
 			return None 
 		#empty list
 		if len(songs) == 0:	
 			songs[0]=song_name
 		else:
 			if checkduplicate(song_name):
-				print("Song already existed")
+				raise DuplicateSongURL()
 			else:
 				songs[len(songs)]=song_name
 		return song_name
@@ -30,8 +48,7 @@ class Playlist():
 	def nextsong():
 		#empty playlist will add default playlist later
 		if len(songs) == 0:
-			print("Playlist is empty")
-		else:
+			raise PlaylistIsEmpty()
 			output = songs[0]
 			move()
 			return output
@@ -39,7 +56,7 @@ class Playlist():
 	def move(start, end):
 		#after getting the some, remove the song and move all the other songs up
 		if len(songs) == 0:
-			print("Playlist is empty")
+			raise PlaylistIsEmpty()
 			return False
 		else:
 			for i in (end-1):
@@ -90,7 +107,7 @@ class Playlist():
 	def removelastsong():
 		#remove the lastest or last song that was added to the playlist
 		if len(songs) == 0:
-			print("List is empty")
+			raise PlaylistIsEmpty()
 		else
 			del songs[-1]
 	

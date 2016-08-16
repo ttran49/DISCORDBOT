@@ -213,7 +213,8 @@ except:
 #	Listen to user message to see if user give the bot any command
 #	Command rule: start with ! and a action
 #	Command:  	!join +"INVITE_URL"  - tell the bot to join a different channel or server
-#				!help - displaying all the option, commands, and syntax
+#						!music + "VOICE_CHANNEL_URL"  - tell the bot to join a voice channel and stream music
+#						!help - displaying all the option, commands, and syntax
 #
 ######################################################################
 @bot.event
@@ -231,4 +232,9 @@ def on_message(message):
 		join_by_invite(message.content.strip("!join "))
 	if message.content.startswith("!help"):
 		display_option(message)
+	if message.content.startswith("!music"):
+		join_voice_channel(message.content.strip("!music "))
+		#play music
+		#creating the audio code
+		
 bot.run(UserSettings.token) #Hack for now
