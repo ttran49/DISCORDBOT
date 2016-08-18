@@ -15,6 +15,13 @@ import traceback
 # if left -> first run
 # if change -> can read info for
 
+###############################################################
+#
+#	this code of getting hash for files can be found on 
+#	StackOverFlow, thanks whoever posted this. Forgot the name and URL!
+#
+###############################################################
+
 #checking both MD5 and SHA1 hash
 
 # BUF_SIZE is totally arbitrary, change for your app!
@@ -100,7 +107,7 @@ class UserSettings(object):
 #	write it to UserSetting for future use
 #
 ###################################################################
-def firstTimeSetup(settings):
+def _firstTimeSetup(settings):
 	print("First time running the bot, required information. Would you like to run the setup? Y/N")
 	userInput = None
 	while True:
@@ -159,7 +166,7 @@ def firstTimeSetup(settings):
 #	Exit when exception occurs
 #				
 ###################################################################
-def join_by_invite(Invite):
+def _join_by_invite(Invite):
 	try:
 		print(Invite)
 		bot.accept_invite(Invite)
@@ -172,7 +179,7 @@ def join_by_invite(Invite):
 #	Display in chat all the options for the bot
 #
 ###################################################################	
-def display_option(message):
+def _display_option(message):
 	option= "Options for the bot: \n	!join: join a server or channel url that given by user\n		Ex: !join INVITE_URL\n	!help: displaying all options"
 	bot.send_message(message.channel, option)
 #check hash value
@@ -229,12 +236,12 @@ def on_ready():
 @asyncio.coroutine
 def on_message(message):
 	if message.content.startswith("!join"):
-		join_by_invite(message.content.strip("!join "))
+		_join_by_invite(message.content.strip("!join "))
 	if message.content.startswith("!help"):
-		display_option(message)
+		_display_option(message)
 	if message.content.startswith("!music"):
-		join_voice_channel(message.content.strip("!music "))
+		_join_voice_channel(message.content.strip("!music "))
 		#play music
-		#creating the audio code
+		# TODO: get default playlist, add user song queue.
 		
 bot.run(UserSettings.token) #Hack for now
