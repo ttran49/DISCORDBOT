@@ -180,7 +180,7 @@ def _join_by_invite(Invite):
 #
 ###################################################################	
 def _display_option(message):
-	option= "Options for the bot: \n	!join: join a server or channel url that given by user\n		Ex: !join INVITE_URL\n	!help: displaying all options"
+	option= "Options for the bot: \n!join: join a server or channel url that given by user   Ex: !join INVITE_URL\n!help: displaying all options\n!music + VOICE_CHANNEL_INVITE  : enable music\n!addsong + SONG_URL : add song to playlist, must be youtube or soundcloud URL\n!skipsong : skip current song\n!pause : pause : pause current song\n!resume : resume current song\n!play : start playing\n!volume + NUMBER : setvolume, number between 0.0 to 2.0. 1.0=100%, 2.0=200%"
 	bot.send_message(message.channel, option)
 #check hash value
 settings = UserSettings()
@@ -221,6 +221,12 @@ except:
 #	Command rule: start with ! and a action
 #	Command:  	!join +"INVITE_URL"  - tell the bot to join a different channel or server
 #						!music + "VOICE_CHANNEL_URL"  - tell the bot to join a voice channel and stream music
+#						!addsong + "SONG_URL- YOUTUBE/SOUNDCLOUD" - add a song to the playlist
+#						!play - tell the bot to play music, if not song in queue, play default playlist
+#						!skipsong - skip the current song
+#						!pause - pause the current song
+#						!resume - resume the current song
+#						!volume + "NUMBER: 0.0 - 2.0" - set the volume 1.0=100%, 2.0=200%
 #						!help - displaying all the option, commands, and syntax
 #
 ######################################################################
@@ -232,6 +238,7 @@ def on_ready():
     print(bot.user.id)
     print('------')
 
+ __music=None
 @bot.event
 @asyncio.coroutine
 def on_message(message):
@@ -240,8 +247,25 @@ def on_message(message):
 	if message.content.startswith("!help"):
 		_display_option(message)
 	if message.content.startswith("!music"):
-		_join_voice_channel(message.content.strip("!music "))
 		#play music
-		# TODO: get default playlist, add user song queue.
-		
+		__music= Audio(message.content.strip("!music "), bot)
+		print("Music has been enabled!")
+	if message.content.startswith("!addsong"):
+		#adding song to playlist if music feature is enable
+		__music.add_song_to_playlist(message.content.strip("!addsong "))
+	if message.content.startswith("!pause"):
+		#pausing song
+		__music.pause()
+	if message.content.startswith("!resume"):
+		#resuming song
+		__music.resume()
+	if message.content.startswith("!skipsong"):
+		#skipping song
+		__music.skipsong()
+	if message.content.startswith("!volume"):
+		#setting volume
+		__music.set_volume(message.content.strip("!volume "))
+	if message.content.startswith("!play"):
+		#play music
+		__music.play()
 bot.run(UserSettings.token) #Hack for now
