@@ -64,14 +64,14 @@ class Audio
 	# TODO: figure out how to implement pause and resume with the current
 	# variable scope
 	def pause():
-		if !__is_playing:
+		if not __is_playing:
 			__Pausing=True
 			
 		else:
 			print("No song is currently playing")
 		
 	def resume():
-		if !__Pausing:
+		if not __Pausing:
 			__Pausing=False
 			
 		else:
