@@ -95,7 +95,7 @@ class Audio
 	#
 	###################################################
 	def resume():
-		if not __Pausingand not (__player is None):
+		if not __Pausing and not (__player is None):
 			__Pausing=False
 			__player.resume()
 		else:
