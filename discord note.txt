@@ -24,3 +24,23 @@ Token: MjExMjAyNzMyOTEwOTY4ODMy.CoZ5aw.CTxXxFf6-ZxnWhLi9hRRSyJp5nM
 USEFUL RESOURCES:
 https://stackoverflow.com/questions/37689289/joining-a-server-with-the-discord-python-api   - solved joining a server
 https://pypi.python.org/pypi/drunkbot/1.9    - the good stuffs
+https://github.com/mopidy/mopidy-soundcloud  - player for soundcloud and spotify. -> how to use it for discord api. player.play()?
+
+Funny stuff
+    @commands.command(no_pm=True, hidden=True)
+    async def hug(self, user : discord.Member, intensity : int=1):
+        """Because everyone likes hugs
+        Up to 10 intensity levels."""
+        name = " *" + user.name + "*"
+        if intensity <= 0:
+            msg = "(???????)?" + name
+        elif intensity <= 3:
+            msg = "(?´?`)?" + name
+        elif intensity <= 6:
+            msg = "?(*´?`*)?" + name
+        elif intensity <= 9:
+            msg = "(????)?" + name
+        elif intensity >= 10:
+            msg = "(?? ³?)?" + name + " ?(´·?·`?)"
+        await self.bot.say(msg)
+FROM RED-DISCORDBOT compy/paste so just use the idea
