@@ -1,6 +1,7 @@
 from discord.ext import commands
-import discord, pafy
+import discord
 import os, sys, logging
+import asyncio
 
 class EmptyPlaylist(Exception):
 	pass
@@ -16,10 +17,16 @@ class Audio
 	#creating an instance of playlist
 	playlist= Playlist();
 	
+	#Constructor, get the client or bot object from bot.py
 	def __init__(self, voice_channel, client_object):
 		self.voice_channel = voice_channel
 		self.client_object = client_object
 	
+	#adding a new song to playlist
+	#
+	#	Expected exception:
+	#		Playlist.DuplicateSongURL - Song/URL already exists
+	#		Playlist.NotValidNameOrURL - Song/URL not in valid format aka String
 	def add_song_to_playlist():
 		song_url=input("Please enter a song URL: ")
 		try:
@@ -29,15 +36,31 @@ class Audio
 		except Playlist.NotValidNameOrURL:
 			print("Not a valid input, must be a string of a song url")
 	
+	def _create_a_stream(playlist):
+		voice = client_object.join_voice_channel(voice_channel)
+		player=None
+		if "youtube" in playlist.currentsong():
+			player= voice.create_ytdl_player(playlist.currentsong())
+		elif "soundcloud" in playlist.currentsong():
+			player=
+		return player
+		
+	#Take the bot object create a stream to play music from youtube
+	# TODO: create one for soundcloud
 	def play():
 		if (playlist.size() == 0):
 			raise EmptyPlaylist()
 		#play the music
-		voice = client_object.join_voice_channel(voice_channel)
 		for i in (playlist.size()-1):
-			player = voice.create_ytdl_player(playlist.currentsong())
-			await player.start()
-			playlist.nextsong()
+			player = _create_a_stream(playlist)
+			player.start()
+			if player.is_done():
+				playlist.nextsong()
+	def pause():
+		
+		
+	def resume():
+		
 	
 	def skipsong():
 		playlist.removethsong(0)
