@@ -44,7 +44,7 @@ with open("UserSetting.txt", 'rb') as f:
         sha1.update(data)
 
 #default token, login if wrong username, pwd, token provided
-defaultToken="MjExMjAyNzMyOTEwOTY4ODMy.CoZ5aw.CTxXxFf6-ZxnWhLi9hRRSyJp5nM"
+defaultToken=""
 
 #Globals are gross, let's pass information with an object
 #
